@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import UserProfileIcon from "@/components/UserProfileIcon";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,14 +48,17 @@ const NavBar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="/cart" className="relative">
-              <ShoppingCart className="text-green-dark hover:text-terracotta transition-colors" size={20} />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-terracotta text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+            <div className="flex items-center space-x-4">
+              <UserProfileIcon />
+              <Link to="/cart" className="relative">
+                <ShoppingCart className="text-green-dark hover:text-terracotta transition-colors" size={20} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-terracotta text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
 
           {/* Mobile Navigation Toggle */}
@@ -82,19 +85,22 @@ const NavBar = () => {
                   {link.name}
                 </Link>
               ))}
-              <Link 
-                to="/cart" 
-                className="font-opensans text-green-dark hover:text-terracotta py-2 transition-colors flex items-center"
-                onClick={() => setIsOpen(false)}
-              >
-                <ShoppingCart size={18} className="mr-2" />
-                Cart
-                {cartCount > 0 && (
-                  <span className="ml-2 bg-terracotta text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
+              <div className="flex items-center space-x-4 py-2">
+                <UserProfileIcon />
+                <Link 
+                  to="/cart" 
+                  className="font-opensans text-green-dark hover:text-terracotta transition-colors flex items-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <ShoppingCart size={18} className="mr-2" />
+                  Cart
+                  {cartCount > 0 && (
+                    <span className="ml-2 bg-terracotta text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+              </div>
             </div>
           </div>
         )}
