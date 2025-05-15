@@ -1,7 +1,7 @@
 
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import { Leaf, Droplet, Sun, Tractor, Cow, Cheese } from "lucide-react";
+import { Leaf, Droplet, Sun, Tractor, Milk, Apple } from "lucide-react";
 
 const About = () => {
   const teamMembers = [
@@ -109,7 +109,7 @@ const About = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="h-14 w-14 bg-green-light rounded-full flex items-center justify-center text-white mb-4">
-                <Cow size={28} />
+                <Milk size={28} />
               </div>
               <h3 className="text-xl font-merriweather font-semibold mb-2 text-green-dark">
                 Animal Welfare
@@ -133,7 +133,7 @@ const About = () => {
 
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="h-14 w-14 bg-green-light rounded-full flex items-center justify-center text-white mb-4">
-                <Cheese size={28} />
+                <Apple size={28} />
               </div>
               <h3 className="text-xl font-merriweather font-semibold mb-2 text-green-dark">
                 Traditional Methods
