@@ -1,5 +1,7 @@
 
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 interface Product {
   id: string;
@@ -11,6 +13,11 @@ interface Product {
 }
 
 const FeaturedProducts = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
   const products: Product[] = [
     {
       id: "1",
@@ -46,25 +53,68 @@ const FeaturedProducts = () => {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { 
+        duration: 0.5,
+      }
+    }
+  };
+
   return (
-    <section className="py-16 bg-cream">
+    <section className="py-16 bg-cream" ref={ref}>
       <div className="container mx-auto">
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="section-title">Our Featured Products</h2>
           <p className="text-gray-700 mt-4 max-w-2xl mx-auto">
             Discover our range of pure, organic dairy products made with traditional methods
             from the milk of our indigenous Gir cows.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
           {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
+            <motion.div 
+              key={product.id} 
+              className="bg-white rounded-lg shadow-md overflow-hidden"
+              variants={itemVariants}
+              whileHover={{ 
+                scale: 1.03, 
+                transition: { duration: 0.2 } 
+              }}
+            >
               <div className="h-48 overflow-hidden">
-                <img
+                <motion.img
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover"
+                  whileHover={{ 
+                    scale: 1.1,
+                    transition: { duration: 0.4 }
+                  }}
                 />
               </div>
               <div className="p-5">
@@ -78,21 +128,32 @@ const FeaturedProducts = () => {
                   <span className="text-terracotta font-bold">{product.price}</span>
                   <Link 
                     to={`/products/${product.id}`}
-                    className="bg-green-light text-white py-1 px-3 rounded hover:bg-green-dark transition-colors"
+                    className="bg-green-light text-white py-1 px-3 rounded hover:bg-green-dark transition-colors relative overflow-hidden group"
                   >
-                    View Details
+                    <span className="relative z-10">View Details</span>
+                    <motion.span 
+                      className="absolute inset-0 bg-green-dark opacity-0 group-hover:opacity-100 transition-opacity"
+                      initial={false}
+                      whileHover={{ scaleX: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
                   </Link>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="text-center mt-12">
-          <Link to="/products" className="btn-primary inline-block">
+        <motion.div 
+          className="text-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <Link to="/products" className="btn-primary inline-block hover:scale-105 transition-transform">
             View All Products
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
