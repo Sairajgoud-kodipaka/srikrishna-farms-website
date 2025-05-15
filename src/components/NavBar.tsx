@@ -1,10 +1,12 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { cartCount } = useCart();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -14,6 +16,7 @@ const NavBar = () => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Products", path: "/products" },
+    { name: "Shop", path: "/shop" },
     { name: "Gallery", path: "/gallery" },
     { name: "Contact", path: "/contact" },
   ];
@@ -45,8 +48,13 @@ const NavBar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="/shop" className="btn-primary">
-              Shop Now
+            <Link to="/cart" className="relative">
+              <ShoppingCart className="text-green-dark hover:text-terracotta transition-colors" size={20} />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-terracotta text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </div>
 
@@ -75,11 +83,17 @@ const NavBar = () => {
                 </Link>
               ))}
               <Link 
-                to="/shop" 
-                className="btn-primary text-center"
+                to="/cart" 
+                className="font-opensans text-green-dark hover:text-terracotta py-2 transition-colors flex items-center"
                 onClick={() => setIsOpen(false)}
               >
-                Shop Now
+                <ShoppingCart size={18} className="mr-2" />
+                Cart
+                {cartCount > 0 && (
+                  <span className="ml-2 bg-terracotta text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
               </Link>
             </div>
           </div>

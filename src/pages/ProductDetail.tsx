@@ -3,6 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import CartIcon from "@/components/CartIcon";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "@/hooks/use-toast";
 
 interface Product {
   id: string;
@@ -26,6 +29,7 @@ interface Product {
 const ProductDetail = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   // This would normally come from an API or database
   const product: Product = {
@@ -60,10 +64,20 @@ const ProductDetail = () => {
     }
   };
 
-  const addToCart = () => {
-    console.log(`Added ${quantity} ${product.name} to cart`);
-    // This would normally update a cart state or call an API
-    alert(`Added ${quantity} ${product.name} to cart!`);
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i++) {
+      addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image
+      });
+    }
+    
+    toast({
+      title: "Added to cart",
+      description: `${quantity} ${quantity === 1 ? 'item' : 'items'} of ${product.name} added to your cart.`,
+    });
   };
 
   // Similar products would come from an API or database
@@ -173,13 +187,13 @@ const ProductDetail = () => {
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <button
                 className="btn-primary flex-1"
-                onClick={addToCart}
+                onClick={handleAddToCart}
               >
                 Add to Cart
               </button>
-              <button className="btn-outline flex-1">
-                Buy Now
-              </button>
+              <Link to="/cart" className="btn-outline flex-1 text-center">
+                View Cart
+              </Link>
             </div>
 
             <div className="border-t pt-6">
@@ -263,6 +277,7 @@ const ProductDetail = () => {
         </div>
       </div>
 
+      <CartIcon />
       <Footer />
     </div>
   );
